@@ -55,7 +55,7 @@ class Boid(Vehicle):
         steering = pg.Vector2()
         for boid in boids:
             steering += boid.velocity
-        steering /= len(boids)
+        steering /= len(boids)  # Средняя скорость (типо)
         steering -= self.velocity
         steering = self.clamp_force(steering)
         return steering / 8  # Лучше не трогать xD

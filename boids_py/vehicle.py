@@ -39,8 +39,8 @@ class Vehicle(pg.sprite.Sprite):
 
         # enforce turn limit
         _, old_heading = self.velocity.as_polar()
-        new_velocity = self.velocity + self.acceleration * dt
-        speed, new_heading = new_velocity.as_polar()
+        new_velocity = self.velocity + self.acceleration * dt  # Изменение скорости
+        speed, new_heading = new_velocity.as_polar()  # Радиальное расстояние и азимутальный угол (???)
 
         heading_diff = 180 - (180 - new_heading + old_heading) % 360
         if abs(heading_diff) > self.max_turn:
@@ -52,7 +52,7 @@ class Vehicle(pg.sprite.Sprite):
         self.velocity.from_polar((speed, new_heading))
 
         # enforce speed limit
-        speed, self.heading = self.velocity.as_polar()
+        speed, self.heading = self.velocity.as_polar()  # Контроль скорости
         if speed < self.min_speed:
             self.velocity.scale_to_length(self.min_speed)
 
@@ -62,7 +62,7 @@ class Vehicle(pg.sprite.Sprite):
         # move
         self.position += self.velocity * dt
 
-        if self.can_wrap:
+        if self.can_wrap:  # Может ли пересекать границу
             self.wrap()
 
         # draw
@@ -97,6 +97,7 @@ class Vehicle(pg.sprite.Sprite):
             self.rect = self.image.get_rect(center=self.position)
 
     def avoid_edge(self):
+        '''Избегание границ'''
         left = self.edges[0] - self.position.x
         up = self.edges[1] - self.position.y + 25
         right = self.position.x - self.edges[2] - 10
@@ -105,6 +106,7 @@ class Vehicle(pg.sprite.Sprite):
         scale = max(left, up, right, down)
 
         if scale > 0:
+            '''Заставляет возвращаться к центру'''
             center = (Vehicle.max_x / 2, Vehicle.max_y / 2)
             steering = pg.Vector2(center)
             steering -= self.position
@@ -114,6 +116,7 @@ class Vehicle(pg.sprite.Sprite):
         return steering
 
     def wrap(self):
+        '''Если есть телепорт на границе'''
         if self.position.x < 0:
             self.position.x += Vehicle.max_x
         elif self.position.x > Vehicle.max_x:
@@ -126,6 +129,7 @@ class Vehicle(pg.sprite.Sprite):
 
     @staticmethod
     def set_boundary(edge_distance_pct):
+        '''Установка границ поля'''
         info = pg.display.Info()
         Vehicle.max_x = info.current_w
         Vehicle.max_y = info.current_h
@@ -134,8 +138,8 @@ class Vehicle(pg.sprite.Sprite):
         Vehicle.edges = [margin_w, margin_h, Vehicle.max_x - margin_w,
                          Vehicle.max_y - margin_h]
 
-    def clamp_force(self, force):  # Сила притягивания (вроде xD)
-        if 0 < force.magnitude() > self.max_force:  # .magnitude() - возвращает длину вектора (абс величина вектора)
+    def clamp_force(self, force):  # Сила смены направления (вроде xD)
+        if 0 < force.magnitude() > self.max_force:  # .magnitude() - возвращает длину вектора (абсол величина вектора)
             force.scale_to_length(self.max_force)  # Увеличивает вектор force до длины вектора max_force
 
         return force

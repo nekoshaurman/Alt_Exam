@@ -9,7 +9,7 @@ from pygame.locals import *
 # Import local modules
 from boid import Boid
 
-default_boids = 4
+default_boids = 4  # Кол-во
 default_geometry = "1800x1000"
 
 
