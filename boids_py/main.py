@@ -9,8 +9,8 @@ from pygame.locals import *
 # Import local modules
 from boid import Boid
 
-default_boids = 4  # Кол-во
-default_geometry = "1800x1000"
+default_boids = 1 # Кол-во
+default_geometry = "1000x1000"
 
 
 def update(dt, boids):
@@ -21,7 +21,6 @@ def update(dt, boids):
     what you can do is something like
 
     x += v * dt
-
     and this will scale your velocity based on time. Extend as necessary."""
 
     # Go through events that are passed to the script by the window.
@@ -89,6 +88,7 @@ def draw(screen, background, boids):
     """
     Draw things to the window. Called once per frame.
     """
+    WHITE = (255, 255, 255)
 
     # Redraw screen here
     boids.clear(screen, background)
@@ -96,12 +96,13 @@ def draw(screen, background, boids):
 
     # Flip the display so that the things we drew actually show up.
     pg.display.update(dirty)
+    pg.draw.rect(screen, WHITE, (20, 20, 100, 75))
 
 
 def main(args):
     # Initialise pg.
     pg.init()
-
+    WHITE = (255, 255, 255)
     pg.event.set_allowed([pg.QUIT, pg.KEYDOWN, pg.KEYUP])
 
     # Set up the clock to maintain a relatively constant framerate.
@@ -109,8 +110,8 @@ def main(args):
     fpsClock = pg.time.Clock()
 
     # Set up the window.
-    logo = pg.image.load("logo32x32.png")
-    pg.display.set_icon(logo)
+    #logo = pg.image.load("logo32x32.png")
+    #pg.display.set_icon(logo)
     pg.display.set_caption("BOIDS!")
     window_width, window_height = [int(x) for x in args.geometry.split("x")]
     flags = DOUBLEBUF
@@ -119,20 +120,20 @@ def main(args):
     screen.set_alpha(None)
     background = pg.Surface(screen.get_size()).convert()
     background.fill(pg.Color('black'))
+    pg.draw.rect(screen, WHITE, (20, 20, 100, 75))
 
     boids = pg.sprite.RenderUpdates()
-
+    pg.draw.rect(screen, WHITE, (20, 20, 100, 75))
     add_boids(boids, args.num_boids)
-
+    pg.draw.rect(screen, WHITE, (20, 20, 100, 75))
     # Main game loop.
     dt = 1/fps  # dt is the time since last frame.
-
+    pg.draw.rect(screen, WHITE, (20, 20, 100, 75))
     # Loop forever!
     while True:
         update(dt, boids)
         draw(screen, background, boids)
         dt = fpsClock.tick(fps)
-
 
 def add_boids(boids, num_boids):
     for _ in range(num_boids):

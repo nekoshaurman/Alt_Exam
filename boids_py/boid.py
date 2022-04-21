@@ -10,10 +10,10 @@ class Boid(Vehicle):
     # green - скорость (velocity)
     # blue - необходимое направление (steering)
     # red - ускорение (acceleration)
-    min_speed = 0.01
-    max_speed = 0.2
+    min_speed = 0
+    max_speed = 0.1
     max_force = 1  # Предположу что это тяга xD
-    max_turn = 5  # Насколько быстро поворачивает и т.д.
+    max_turn = 2  # Насколько быстро поворачивает и т.д.
     perception = 60  # На каком расстоянии замечают друг друга
     crowding = 30  # Какое расстояние удерживают в рое
     can_wrap = False  # Границы-телепорты
@@ -22,16 +22,19 @@ class Boid(Vehicle):
 
     def __init__(self):
         Boid.set_boundary(Boid.edge_distance_pct)
-
+        startpozx = 100
+        startpozy = 100
+        destposx = 200
+        destposy = 200
+        start_velocity = pg.math.Vector2(destposx * Boid.max_speed,destposy * Boid.max_speed
+            )
         # Randomize starting position and velocity
-        start_position = pg.math.Vector2(
-            uniform(100, 400),
-            uniform(100, 400))  # Рандомная зона спавна
+        start_position = pg.math.Vector2(startpozx,startpozy)  # Рандомная зона спавна
             #uniform(0, Boid.max_x),
             #uniform(0, Boid.max_y))
-        start_velocity = pg.math.Vector2(
-            uniform(-1, 1) * Boid.max_speed,
-            uniform(-1, 1) * Boid.max_speed)  # Рандомная скорость
+        #start_velocity = pg.math.Vector2(
+            #uniform(-1, 1) * Boid.max_speed,
+            #uniform(-1, 1) * Boid.max_speed)  # Рандомная скорость
 
         super().__init__(start_position, start_velocity,
                          Boid.min_speed, Boid.max_speed,
